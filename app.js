@@ -18,7 +18,7 @@ var rawTransaction = {
 };
 
 // Sign Transaction
-var privateKeySender = 'f2f09775cd29182ac515535311a705e53b7217b0163d63ce5cb3db76c3637249';
+var privateKeySender = '';
 var privateKeySenderHex = new Buffer.from(privateKeySender, 'hex');
 var transaction = new EthereumTransaction(rawTransaction);
 transaction.sign(privateKeySenderHex);
