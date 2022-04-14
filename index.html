@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Deploy a Remix Contract</title>
+
+		<link rel="stylesheet" type="text/css" href="main.css" />
+
+		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	</head>
+
+	<body>
+		<div>
+			<h1>Deploy a Remix Contract</h1>
+			<hr />
+
+			<label for="message"
+				>This site writes a secret message to the Ethereum blockchain!</label
+			>
+			<input id="userInput" type="text" />
+
+			<button id="setMessageButton">Set secret message</button>
+		</div>
+
+		<script>
+			//Connect a the web3 provider
+			if (typeof web3 !== 'undefined') {
+				web3 = new Web3(window.ethereum);
+				console.log('metamask connected ✅');
+			} else {
+				web3 = new Web3(
+					new Web3.providers.HttpProvider(
+						'https://rinkeby.infura.io/v3/2e4648081668445c8ea87809c81af69d',
+					),
+				);
+			}
+
+			// Set a default account
+			web3.eth.defaultAccount = web3.eth.accounts[0];
+
+			// Set a default account
+			let contractAddress = '0x254AbF085C1d902DDf69827c4adbF675D649c2EF';
+
+			let abi = [
+				{
+					'constant': false,
+					'inputs': [
+						{
+							'name': 'x',
+							'type': 'string',
+						},
+					],
+					'name': 'setMessage',
+					'outputs': [],
+					'payable': false,
+					'stateMutability': 'nonpayable',
+					'type': 'function',
+				},
+				{
+					'constant': true,
+					'inputs': [],
+					'name': 'getMessage',
+					'outputs': [
+						{
+							'name': '',
+							'type': 'string',
+						},
+					],
+					'payable': false,
+					'stateMutability': 'view',
+					'type': 'function',
+				},
+				{ from: '0x813C3a7D25FCCF9d6371f1ed45b897778108B708', gasPrice: '20000000000' },
+			];
+
+			// Get the contract address
+			let RemixContract = new web3.eth.Contract(abi, contractAddress);
+
+			console.log(RemixContract);
+
+			$('#setMessageButton').click(function () {
+				RemixContract.methods
+					.setMessage($('#userInput').val())
+					.send({ from: '0x813C3a7D25FCCF9d6371f1ed45b897778108B708' })
+					.then((result) => console.log('res', result));
+				// console.log($('#userInput').val());
+			});
+
+			const connectionButton = document.querySelector('#setMessageButton');
+
+			connectionButton.addEventListener('click', () => {
+				//Will Start the metamask extension
+				ethereum.request({ method: 'eth_requestAccounts' });
+			});
+
+			RemixContract.methods
+				.getMessage()
+				.call()
+				.then(function (result) {
+					console.log('getMessage', result);
+				});
+		</script>
+	</body>
+</html>
