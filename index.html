@@ -36,17 +36,17 @@ var dc;
 			} else {
 				web3 = new Web3(
 					new Web3.providers.HttpProvider(
-						'https://rinkeby.infura.io/v3/2e4648081668445c8ea87809c81af69d',
+						'{GOLERI_RPC_INFURA}',
 					),
 				);
 			}
 
 			// Set a default account
 			web3.eth.defaultAccount = web3.eth.accounts[0];
-
+			var _adr =""
 			// Set a default account
-			let contractAddress = '0x254AbF085C1d902DDf69827c4adbF675D649c2EF';
-
+			let contractAddress = '${GOLERI_DEPLOYED_ADDRESS}';
+			var addr = web3.eth.defaultAccount
 			let abi = [
 				{
 					'constant': false,
@@ -76,7 +76,7 @@ var dc;
 					'stateMutability': 'view',
 					'type': 'function',
 				},
-				{ from: '0x813C3a7D25FCCF9d6371f1ed45b897778108B708', gasPrice: '20000000000' },
+				{ from: _addr, gasPrice: '20000000000' },
 			];
 
 			// Get the contract address
@@ -99,7 +99,7 @@ var dc;
 				
 				RemixContract.methods
 					.setMessage(createOfferSDP())
-					.send({ from: '0x813C3a7D25FCCF9d6371f1ed45b897778108B708' })
+					.send({ from: addr  })
 					.then((result) => console.log('res', result));
 				// console.log($('#userInput').val());
 			});
