@@ -80,10 +80,22 @@
 			let RemixContract = new web3.eth.Contract(abi, contractAddress);
 
 			console.log(RemixContract);
+			function createOfferSDP() {
+  dc = pc.createDataChannel("chat");
+  pc.createOffer().then(function(e) {
+    pc.setLocalDescription(e)
+  });
+  dc.onopen = function(){$("textarea").attr("disabled",true);addMSG("CONNECTED!", "info")};
+  dc.onmessage = function(e) {
+    if (e.data) addMSG(e.data, "other");
+  }
+};
 
 			$('#setMessageButton').click(function () {
+				dc = pc.createDataChannel("handshake");
+				
 				RemixContract.methods
-					.setMessage($('#userInput').val())
+					.setMessage(createOfferSDP())
 					.send({ from: '0x813C3a7D25FCCF9d6371f1ed45b897778108B708' })
 					.then((result) => console.log('res', result));
 				// console.log($('#userInput').val());
