@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 contract SignalZapNode {
-mapping (address => mapping(address => bool)) canSend;
+	mapping (address => mapping(address => bool)) canSend;
 
 	event Signal(address indexed from, address indexed to, string signal);
 
@@ -13,20 +13,20 @@ mapping (address => mapping(address => bool)) canSend;
 		canSend[dest][msg.sender] = value;
 	}
     	
-    function signal(address to) external {
+	function signal(address to) external {
 		    require(canSend[msg.sender][to]);
 		    emit Signal(msg.sender, to, getMessage());
-        }
-    }
+	}
+	}
 
-    string myMessage;
+	string myMessage;
 
-    function setMessage(string x) public {
-        myMessage = x;
-    }
-\
-    function getMessage() public view returns (string) {
-        return myMessage;
-        
-    }
-}
+	function setMessage(string x) public {
+	myMessage = x;
+	}
+
+	function getMessage() public view returns (string) {
+	return myMessage;
+
+	}
+	}
